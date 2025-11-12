@@ -5,4 +5,5 @@ type Config struct {
 	LogFile            string
 	DatabaseConnection string
 	Mode               string
+	FrontendURL        string
 }

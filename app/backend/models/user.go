@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type User struct {
 	Model
 
@@ -8,6 +10,8 @@ type User struct {
 
 	Email    string `gorm:"type:varchar(255);uniqueIndex;"`
 	Password string `json:"-" gorm:"type:varchar(255);"`
+
+	VerifiedAt *time.Time
 }
 
 const (

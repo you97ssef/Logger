@@ -3,7 +3,8 @@
         "port": "8000",
         "log_file": "./logs/app.log",
         "database_connection": "host=localhost user=postgres password=postgres dbname=logger port=5432",
-        "mode": "development"
+        "mode": "development",
+        "frontend_url": "http://localhost:3000"
     },
     "mailer": {
         "username": "username",

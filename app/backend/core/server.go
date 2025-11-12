@@ -85,6 +85,7 @@ func (s *Server) setupEnv(envFile string) any {
 		LogFile:            environment.(map[string]any)["config"].(map[string]any)["log_file"].(string),
 		DatabaseConnection: environment.(map[string]any)["config"].(map[string]any)["database_connection"].(string),
 		Mode:               environment.(map[string]any)["config"].(map[string]any)["mode"].(string),
+		FrontendURL:        environment.(map[string]any)["config"].(map[string]any)["frontend_url"].(string),
 	}
 
 	return environment

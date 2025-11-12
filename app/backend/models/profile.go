@@ -14,7 +14,7 @@ type Profile struct {
 
 	Name     string  `gorm:"type:varchar(255);"`
 	Token    string  `gorm:"type:varchar(64);"`
-	Trackers *string // name,pattern,frequency,platform;name,pattern,frequency,platform
+	Trackers *string // name,pattern,platform;name,pattern,platform
 }
 
 const TokenLength = 64
@@ -25,3 +25,8 @@ func (p *Profile) BeforeCreate(tx *gorm.DB) (err error) {
 	}
 	return
 }
+
+const (
+	InApp  = 1
+	Email   = 2
+)
