@@ -6,6 +6,7 @@ import (
 	"logger/models"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func (ctl *Controller) GetProfiles(c *gin.Context) {
@@ -30,8 +31,23 @@ func (ctl *Controller) CreateProfile(c *gin.Context) {
 		return
 	}
 
+	userId := helpers.GetUserId(ctl.server.Jwt, c)
+
+	exists, err := ctl.repositories.UserRepo.ExistById(userId)
+
+	if err != nil {
+		ctl.server.Logger.Alert(err)
+		Error(c, "Error checking user existence")
+		return
+	}
+	
+	if !exists {
+		Unauthorized(c, "Account not found")
+		return
+	}
+
 	profile := &models.Profile{
-		UserId: helpers.GetUserId(ctl.server.Jwt, c),
+		UserId: userId,
 		Name:   newProfileDTO.Name,
 	}
 
@@ -61,7 +77,14 @@ func (ctl *Controller) UpdateProfile(c *gin.Context) {
 
 	var id = c.Param("id")
 
-	profile, err := ctl.repositories.ProfileRepo.FindById(id)
+	profileUuid, err := uuid.Parse(id)
+
+	if err != nil {
+		BadRequest(c, "Invalid profile ID")
+		return
+	}
+
+	profile, err := ctl.repositories.ProfileRepo.FindById(profileUuid)
 
 	if err != nil {
 		ctl.server.Logger.Alert(err)
@@ -96,7 +119,14 @@ func (ctl *Controller) UpdateProfile(c *gin.Context) {
 func (ctl *Controller) DeleteProfile(c *gin.Context) {
 	var id = c.Param("id")
 
-	profile, err := ctl.repositories.ProfileRepo.FindById(id)
+	profileUuid, err := uuid.Parse(id)
+
+	if err != nil {
+		BadRequest(c, "Invalid profile ID")
+		return
+	}
+
+	profile, err := ctl.repositories.ProfileRepo.FindById(profileUuid)
 
 	if err != nil {
 		ctl.server.Logger.Alert(err)
@@ -123,4 +153,25 @@ func (ctl *Controller) DeleteProfile(c *gin.Context) {
 	}
 	
 	Ok(c, nil, "Profile deleted successfully")
+}
+
+func (ctl *Controller) GetUserProfiles(c *gin.Context) {
+	var id = c.Param("id")
+
+	uuid, err := uuid.Parse(id)
+
+	if err != nil {
+		BadRequest(c, "Invalid user ID")
+		return
+	}
+
+	profiles, err := ctl.repositories.ProfileRepo.FindByUserId(uuid)
+
+	if err != nil {
+		ctl.server.Logger.Alert(err)
+		Error(c, "Error getting profiles")
+		return
+	}
+
+	Ok(c, profiles, "Profiles retrieved successfully")
 }
