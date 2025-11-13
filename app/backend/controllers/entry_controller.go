@@ -2,10 +2,12 @@ package controllers
 
 import (
 	"logger/dtos"
+	"logger/helpers"
 	"logger/models"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func (ctl *Controller) LogEntry(c *gin.Context) {
@@ -41,7 +43,27 @@ func (ctl *Controller) LogEntry(c *gin.Context) {
 func (ctl *Controller) CountEntries(c *gin.Context) {
 	var profileId = c.Param("profileId")
 
-	entries, err := ctl.repositories.EntryRepo.CountByProfileId(profileId)
+	profileUuid, err := uuid.Parse(profileId)
+
+	if err != nil {
+		BadRequest(c, "Invalid profile ID")
+		return
+	}
+
+	profile, err := ctl.repositories.ProfileRepo.FindById(profileUuid)
+	
+	if err != nil {
+		ctl.server.Logger.Alert(err)
+		Error(c, "Error finding profile")
+		return
+	}
+
+	if profile == nil || profile.UserId != helpers.GetUserId(ctl.server.Jwt, c) {
+		NotFound(c, "Profile not found")
+		return
+	}
+
+	entries, err := ctl.repositories.EntryRepo.CountByProfileId(profileUuid)
 
 	if err != nil {
 		ctl.server.Logger.Alert(err)
@@ -63,7 +85,27 @@ func (ctl *Controller) GetEntries(c *gin.Context) {
 		return
 	}
 
-	entries, err := ctl.repositories.EntryRepo.FindByProfileId(profileId, pageInt)
+	profileUuid, err := uuid.Parse(profileId)
+
+	if err != nil {
+		BadRequest(c, "Invalid profile ID")
+		return
+	}
+
+	profile, err := ctl.repositories.ProfileRepo.FindById(profileUuid)
+	
+	if err != nil {
+		ctl.server.Logger.Alert(err)
+		Error(c, "Error finding profile")
+		return
+	}
+
+	if profile == nil || profile.UserId != helpers.GetUserId(ctl.server.Jwt, c) {
+		NotFound(c, "Profile not found")
+		return
+	}
+
+	entries, err := ctl.repositories.EntryRepo.FindByProfileId(profileUuid, pageInt)
 
 	if err != nil {
 		ctl.server.Logger.Alert(err)
@@ -72,4 +114,34 @@ func (ctl *Controller) GetEntries(c *gin.Context) {
 	}
 
 	Ok(c, entries, "Entries retrieved successfully")
+}
+
+func (ctl *Controller) ClearEntries(c *gin.Context) {
+	profileId := c.Param("profileId")
+	
+	profileUuid, err := uuid.Parse(profileId)
+	if err != nil {
+		BadRequest(c, "Invalid profile ID")
+		return
+	}
+
+	profile, err := ctl.repositories.ProfileRepo.FindById(profileUuid)
+	if err != nil {
+		ctl.server.Logger.Alert(err)
+		Error(c, "Error finding profile")
+		return
+	}
+
+	if profile == nil || profile.UserId != helpers.GetUserId(ctl.server.Jwt, c) {
+		NotFound(c, "Profile not found")
+		return
+	}
+	
+	if err := ctl.repositories.EntryRepo.DeleteByProfileId(profileUuid); err != nil {
+		ctl.server.Logger.Alert(err)
+		Error(c, "Error clearing entries")
+		return
+	}
+
+	Ok(c, nil, "Entries cleared successfully")
 }
