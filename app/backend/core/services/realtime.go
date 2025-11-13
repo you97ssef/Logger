@@ -1,94 +1,89 @@
 package services
 
 import (
-	"net/http"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
 
 type RealTime struct {
-	upgrader  *websocket.Upgrader
-	clients   map[*websocket.Conn]bool
-	broadcast chan []byte
+	upgrader websocket.Upgrader
 
-	upUpgrader  *websocket.Upgrader
-	upClients   map[*websocket.Conn]bool
-	broadcastUp chan []byte
+	// token-scoped connections for tailing logs by profile token
+	tokenClients map[string]map[*websocket.Conn]bool
+	mu           sync.RWMutex
 }
 
 func NewRealtime() *RealTime {
 	return &RealTime{
-		upgrader: &websocket.Upgrader{
-			CheckOrigin: checkOrigin,
-		},
-		clients:   make(map[*websocket.Conn]bool),
-		broadcast: make(chan []byte),
-
-		upUpgrader: &websocket.Upgrader{
-			CheckOrigin: checkOrigin,
-		},
-		upClients:   make(map[*websocket.Conn]bool),
-		broadcastUp: make(chan []byte),
+		tokenClients: make(map[string]map[*websocket.Conn]bool),
 	}
 }
 
-func checkOrigin(r *http.Request) bool {
-	return true
-}
+// ConnectTail upgrades the connection to WebSocket and registers the client
+// under the token provided in the route param :token. Incoming messages are
+// ignored; the connection is used only for server->client broadcasts.
+func (r *RealTime) ConnectTail(c *gin.Context) {
+	token := c.Param("token")
 
-func (r *RealTime) Connect(c *gin.Context) {
 	conn, err := r.upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		return
 	}
+
+	// Ensure cleanup on function return
 	defer conn.Close()
 
-	r.clients[conn] = true
-
-	for {
-		_, message, err := conn.ReadMessage()
-		if err != nil {
-			break
-		}
-
-		r.broadcast <- message
+	// Register connection under the token
+	r.mu.Lock()
+	if _, ok := r.tokenClients[token]; !ok {
+		r.tokenClients[token] = make(map[*websocket.Conn]bool)
 	}
-}
+	r.tokenClients[token][conn] = true
+	r.mu.Unlock()
 
-func (r *RealTime) ConnectUp(c *gin.Context) {
-	conn, err := r.upUpgrader.Upgrade(c.Writer, c.Request, nil)
-	if err != nil {
-		return
-	}
-	defer conn.Close()
-
-	r.upClients[conn] = true
-
+	// Read loop to keep the connection alive; ignore payloads.
 	for {
-		_, message, err := conn.ReadMessage()
-		if err != nil {
-			break
-		}
-
-		r.broadcastUp <- message
-	}
-}
-
-func (r *RealTime) HandleMessages() {
-	for {
-		msg := <-r.broadcast
-
-		for client := range r.clients {
-			err := client.WriteMessage(websocket.TextMessage, msg)
-			if err != nil {
-				client.Close()
-				delete(r.clients, client)
+		if _, _, err := conn.ReadMessage(); err != nil {
+			// On error (client disconnect), remove the client and break
+			r.mu.Lock()
+			if conns, ok := r.tokenClients[token]; ok {
+				delete(conns, conn)
+				// Optionally clean up empty maps
+				if len(conns) == 0 {
+					delete(r.tokenClients, token)
+				}
 			}
+			r.mu.Unlock()
+			break
 		}
 	}
 }
 
-func (r *RealTime) BroadcastMessage(message []byte) {
-	r.broadcast <- message
+// BroadcastToToken sends the message to all clients subscribed with the token.
+func (r *RealTime) BroadcastToToken(token string, message []byte) {
+	r.mu.RLock()
+	conns := r.tokenClients[token]
+	// Create a copy of the connections to avoid holding the read lock during network writes
+	var targets []*websocket.Conn
+	for conn := range conns {
+		targets = append(targets, conn)
+	}
+	r.mu.RUnlock()
+
+	// Write to clients; on error, remove the client
+	for _, conn := range targets {
+		if err := conn.WriteMessage(websocket.TextMessage, message); err != nil {
+			conn.Close()
+			r.mu.Lock()
+			if conns, ok := r.tokenClients[token]; ok {
+				delete(conns, conn)
+				if len(conns) == 0 {
+					delete(r.tokenClients, token)
+				}
+			}
+			r.mu.Unlock()
+		}
+	}
 }

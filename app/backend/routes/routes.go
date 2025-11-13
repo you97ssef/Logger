@@ -46,6 +46,8 @@ func (r *Routes) RegisterRoutes(c *controllers.Controller, m *middleware.Middlew
 	admin.GET("/users/:id/profiles", c.GetUserProfiles)
 	
 	routes.POST("/log", c.LogEntry)
+	// Realtime tailing by profile token (WebSocket)
+	routes.GET("/tail/:token", c.TailLogs)
 	connected.GET("/profiles/:id", c.CountEntries)
 	connected.GET("/profiles/:id/logs", c.GetEntries)
 	connected.DELETE("/profiles/:id/logs", c.ClearEntries)

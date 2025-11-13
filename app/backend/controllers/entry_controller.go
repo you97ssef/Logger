@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"logger/dtos"
 	"logger/helpers"
 	"logger/models"
@@ -40,6 +41,12 @@ func (ctl *Controller) LogEntry(c *gin.Context) {
 		ctl.server.Logger.Alert(err)
 		Error(c, "Error logging entry")
 		return
+	}
+
+	if payload, err := json.Marshal(entry); err == nil {
+		ctl.server.RealTime.BroadcastToToken(newEntryDTO.Token, payload)
+	} else {
+		ctl.server.Logger.Alert(err)
 	}
 
 	// TODO: Implement webhook notification here and email notification
