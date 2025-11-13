@@ -28,7 +28,7 @@ func NewProfileRepo(s *core.Server) *ProfileRepoImpl {
 func (pr *ProfileRepoImpl) FindByUserId(userId uuid.UUID) (*[]models.Profile, error) {
 	var profiles *[]models.Profile
 
-	if err := pr.server.DB.Where("profile_id = ?", userId).Find(&profiles).Error; err != nil {
+	if err := pr.server.DB.Where("user_id = ?", userId).Find(&profiles).Error; err != nil {
 		return nil, err
 	}
 

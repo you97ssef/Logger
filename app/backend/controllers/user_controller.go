@@ -115,14 +115,14 @@ func (ctl *Controller) Users(c *gin.Context) {
 func (ctl *Controller) DeleteUser(c *gin.Context) {
 	id := c.Param("id")
 
-	uuid, err := uuid.Parse(id)
+	userUUID, err := uuid.Parse(id)
 
 	if err != nil {
 		BadRequest(c, "Invalid user ID")
 		return
 	}
 
-	user, err := ctl.repositories.UserRepo.FindById(uuid)
+	user, err := ctl.repositories.UserRepo.FindById(userUUID)
 
 	if err != nil {
 		ctl.server.Logger.Alert(err)

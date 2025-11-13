@@ -105,15 +105,17 @@ func (ur *UserRepoImpl) Save(user *models.User) error {
 }
 
 func (ur *UserRepoImpl) Delete(user *models.User) error {
-	var profilesIds *[]uuid.UUID
+	var profilesIds []uuid.UUID
 
 	if err := ur.server.DB.Model(&models.Profile{}).Where("user_id = ?", user.ID).
 		Pluck("id", &profilesIds).Error; err != nil {
 		return err
 	}
 
-	if err := ur.server.DB.Where("profile_id IN ?", *profilesIds).Delete(&models.Entry{}).Error; err != nil {
-		return err
+	if len(profilesIds) > 0 {
+		if err := ur.server.DB.Where("profile_id IN ?", profilesIds).Delete(&models.Entry{}).Error; err != nil {
+			return err
+		}
 	}
 
 	if err := ur.server.DB.Where("user_id = ?", user.ID).Delete(&models.Profile{}).Error; err != nil {

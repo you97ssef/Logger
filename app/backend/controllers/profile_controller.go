@@ -68,10 +68,12 @@ func (ctl *Controller) UpdateProfile(c *gin.Context) {
 		return
 	}
 
-	for _, t := range *updateProfileDTO.Trackers {
-		if t.Platform != models.InApp && t.Platform != models.Email {
-			BadRequest(c, "Invalid tracker platform")
-			return
+	if updateProfileDTO.Trackers != nil {
+		for _, t := range *updateProfileDTO.Trackers {
+			if t.Platform != models.InApp && t.Platform != models.Email {
+				BadRequest(c, "Invalid tracker platform")
+				return
+			}
 		}
 	}
 
@@ -104,8 +106,12 @@ func (ctl *Controller) UpdateProfile(c *gin.Context) {
 		return
 	}
 
-	profile.Name = *updateProfileDTO.Name
-	profile.Trackers = helpers.TrackersToString(&updateProfileDTO)
+	if updateProfileDTO.Name != nil {
+		profile.Name = *updateProfileDTO.Name
+	}
+	if updateProfileDTO.Trackers != nil {
+		profile.Trackers = helpers.TrackersToString(&updateProfileDTO)
+	}
 
 	if err := ctl.repositories.ProfileRepo.Save(profile); err != nil {
 		ctl.server.Logger.Alert(err)
@@ -158,14 +164,14 @@ func (ctl *Controller) DeleteProfile(c *gin.Context) {
 func (ctl *Controller) GetUserProfiles(c *gin.Context) {
 	var id = c.Param("id")
 
-	uuid, err := uuid.Parse(id)
+	profileUUID, err := uuid.Parse(id)
 
 	if err != nil {
 		BadRequest(c, "Invalid user ID")
 		return
 	}
 
-	profiles, err := ctl.repositories.ProfileRepo.FindByUserId(uuid)
+	profiles, err := ctl.repositories.ProfileRepo.FindByUserId(profileUUID)
 
 	if err != nil {
 		ctl.server.Logger.Alert(err)
