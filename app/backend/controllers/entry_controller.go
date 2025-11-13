@@ -49,7 +49,14 @@ func (ctl *Controller) LogEntry(c *gin.Context) {
 		ctl.server.Logger.Alert(err)
 	}
 
-	// TODO: Implement webhook notification here and email notification
+	// Trackers logic extracted for readability
+	profile, err := ctl.repositories.ProfileRepo.FindById(*profileId)
+	if err != nil {
+		ctl.server.Logger.Alert(err)
+	} else {
+		ctl.handleTrackers(profile, entry, newEntryDTO.Token)
+	}
+	
 
 	Ok(c, entry, "Entry logged successfully")
 }

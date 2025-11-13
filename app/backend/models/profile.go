@@ -33,6 +33,7 @@ func (p *Profile) BeforeCreate(tx *gorm.DB) (err error) {
 const (
 	InApp = 1
 	Email = 2
+	Both  = 3 // In-app and Email
 )
 
 func seedProfiles(s *core.Server, usersIds []uuid.UUID) []uuid.UUID {

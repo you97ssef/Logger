@@ -70,7 +70,7 @@ func (ctl *Controller) UpdateProfile(c *gin.Context) {
 
 	if updateProfileDTO.Trackers != nil {
 		for _, t := range *updateProfileDTO.Trackers {
-			if t.Platform != models.InApp && t.Platform != models.Email {
+			if t.Platform != models.InApp && t.Platform != models.Email && t.Platform != models.Both {
 				BadRequest(c, "Invalid tracker platform")
 				return
 			}

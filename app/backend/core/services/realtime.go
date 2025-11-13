@@ -1,6 +1,7 @@
 package services
 
 import (
+	"net/http"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -16,9 +17,12 @@ type RealTime struct {
 }
 
 func NewRealtime() *RealTime {
-	return &RealTime{
+	r := &RealTime{
 		tokenClients: make(map[string]map[*websocket.Conn]bool),
 	}
+	// Allow cross-origin websocket connections (frontend and backend can run on different origins)
+	r.upgrader.CheckOrigin = func(r *http.Request) bool { return true }
+	return r
 }
 
 // ConnectTail upgrades the connection to WebSocket and registers the client
@@ -87,3 +91,7 @@ func (r *RealTime) BroadcastToToken(token string, message []byte) {
 		}
 	}
 }
+
+// HandleMessages is a no-op placeholder to satisfy server initialization.
+// Current implementation directly broadcasts without a background loop.
+func (r *RealTime) HandleMessages() {}
