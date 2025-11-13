@@ -9,7 +9,9 @@ import (
 
 type UserRepo interface {
 	FindByEmail(email string) (*models.User, error)
+	FindById(id uuid.UUID) (*models.User, error)
 	ExistByEmail(email string) (bool, error)
+	ExistById(id uuid.UUID) (bool, error)
 	Verified(email string) (bool, error)
 	All() (*[]models.User, error)
 	Save(user *models.User) error
@@ -39,10 +41,33 @@ func (ur *UserRepoImpl) FindByEmail(email string) (*models.User, error) {
 	return &user, nil
 }
 
+func (ur *UserRepoImpl) FindById(id uuid.UUID) (*models.User, error) {
+	var user models.User
+
+	if err := ur.server.DB.Where("id = ?", id).First(&user).Error; err != nil {
+		if err.Error() == "record not found" {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func (ur *UserRepoImpl) ExistByEmail(email string) (bool, error) {
 	var count int64
 
 	if err := ur.server.DB.Model(&models.User{}).Where("email = ?", email).Count(&count).Error; err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}
+
+func (ur *UserRepoImpl) ExistById(id uuid.UUID) (bool, error) {
+	var count int64
+	
+	if err := ur.server.DB.Model(&models.User{}).Where("id = ?", id).Count(&count).Error; err != nil {
 		return false, err
 	}
 

@@ -10,7 +10,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func PrepareToken(jwtService *services.Jwt, user *models.User) (string, error) {
+func PrepareLoginToken(jwtService *services.Jwt, user *models.User) (string, error) {
 	claims := jwt.MapClaims{
 		"id": user.ID,
 
@@ -27,10 +27,11 @@ func PrepareToken(jwtService *services.Jwt, user *models.User) (string, error) {
 	return jwtService.GenerateToken(claims)
 }
 
-func PrepareVerificationToken(jwtService *services.Jwt, email string) (string, error) {
+func PreparePurposeToken(jwtService *services.Jwt, email string, purpose string) (string, error) {
 	token, err := jwtService.GenerateToken(jwt.MapClaims{
 		"email": email,
 		"exp":   time.Now().Add(time.Hour * 24).Unix(),
+		"purpose": purpose,
 	})
 
 	return token, err
@@ -38,4 +39,8 @@ func PrepareVerificationToken(jwtService *services.Jwt, email string) (string, e
 
 func GetUserId(jwtService *services.Jwt, c *gin.Context) uuid.UUID {
 	return jwtService.GetValue(c.MustGet("claims").(jwt.MapClaims), "id").(uuid.UUID)
+}
+
+func IsAdmin(jwtService *services.Jwt, claims jwt.MapClaims) bool {
+	return jwtService.GetValue(claims, "role") == models.Admin
 }
