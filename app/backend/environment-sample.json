@@ -16,6 +16,7 @@
         "cost": 12
     },
     "jwt": {
-        "secret_key": "secret"
+        "secret_key": "secret",
+        "days": 7
     }
 }

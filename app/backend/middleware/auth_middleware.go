@@ -1,10 +1,12 @@
 package middleware
 
 import (
+	"errors"
 	"logger/controllers"
 	"logger/helpers"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func (m *Middleware) Connected() gin.HandlerFunc {
@@ -13,7 +15,11 @@ func (m *Middleware) Connected() gin.HandlerFunc {
 
 		if err != nil {
 			m.server.Logger.Alert(err.Error())
-			controllers.Unauthorized(c, "Invalid token")
+			if errors.Is(err, jwt.ErrTokenExpired) {
+				controllers.Unauthorized(c, "Token expired")
+			} else {
+				controllers.Unauthorized(c, "Invalid token")
+			}
 			return
 		}
 
@@ -29,7 +35,11 @@ func (m *Middleware) Admin() gin.HandlerFunc {
 
 		if err != nil {
 			m.server.Logger.Alert(err.Error())
-			controllers.Unauthorized(c, "Invalid token")
+			if errors.Is(err, jwt.ErrTokenExpired) {
+				controllers.Unauthorized(c, "Token expired")
+			} else {
+				controllers.Unauthorized(c, "Invalid token")
+			}
 			return
 		}
 

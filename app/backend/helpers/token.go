@@ -22,6 +22,8 @@ func PrepareLoginToken(jwtService *services.Jwt, user *models.User) (string, err
 		"created_at":  user.CreatedAt,
 		"updated_at":  user.UpdatedAt,
 		"verified_at": user.VerifiedAt,
+
+		"exp": time.Now().Add(jwtService.GetAccessTTL()).Unix(),
 	}
 
 	return jwtService.GenerateToken(claims)
