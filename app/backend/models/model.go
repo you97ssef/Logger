@@ -24,3 +24,10 @@ func (b *Model) BeforeCreate(tx *gorm.DB) (err error) {
 	}
 	return
 }
+
+func (b *SlimModel) BeforeCreate(tx *gorm.DB) (err error) {
+	if b.ID == uuid.Nil {
+		b.ID = uuid.New()
+	}
+	return
+}
