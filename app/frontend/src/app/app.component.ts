@@ -5,6 +5,7 @@ import { LoadingComponent } from './core/components/loading/loading.component';
 import { ToastComponent } from './core/components/toast/toast.component';
 import { ThemeService } from './core/services/theme.service';
 import { TokenService } from './core/services/token.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
     selector: 'app-root',
@@ -15,9 +16,13 @@ import { TokenService } from './core/services/token.service';
 export class AppComponent implements OnInit {
     themeService = inject(ThemeService);
     tokenService = inject(TokenService);
+    authService = inject(AuthService);
 
     ngOnInit(): void {
         this.themeService.loadTheme();
         this.tokenService.loadToken();
+        if (this.authService.tokenExpiringInLessThan24Hours()) {
+            this.authService.refreshToken().subscribe();
+        }
     }
 }
