@@ -1,0 +1,25 @@
+<dialog id="modal" class="modal" #md>
+    <div class="modal-box">
+        <form method="dialog">
+            <button
+                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+                <i-lucide [img]="Close" class="my-icon"></i-lucide>
+            </button>
+            <h3 class="font-bold text-lg">{{ modalService.title }}</h3>
+            <p class="py-4">{{ modalService.body }}</p>
+            <div class="flex justify-end gap-2">
+                <button class="btn btn-primary" (click)="close(true)">
+                    <i-lucide [img]="Confirm" class="my-icon"></i-lucide>
+                    Confirm
+                </button>
+                <button
+                    class="btn btn-square btn-neutral"
+                    (click)="close(false)"
+                >
+                    <i-lucide [img]="Cancel" class="my-icon"></i-lucide>
+                </button>
+            </div>
+        </form>
+    </div>
+</dialog>

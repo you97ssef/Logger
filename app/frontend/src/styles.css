@@ -3,7 +3,7 @@
 
 /* Custom themes for Logger: Light and Dark (bubbly look) */
 @plugin "daisyui/theme" {
-    name: "loggerLight";
+    name: "light";
     default: true;
     prefersdark: false;
     color-scheme: light;
@@ -38,7 +38,7 @@
 }
 
 @plugin "daisyui/theme" {
-    name: "loggerDark";
+    name: "dark";
     default: false;
     prefersdark: true;
     color-scheme: dark;
