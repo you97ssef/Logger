@@ -3,7 +3,7 @@
         <p>Login using the form down below</p>
         <p>
             <span>If you don't have an account, you can create one </span>
-            <a class="link" href="/register">here</a>
+            <a class="link" routerLink="/register">here</a>
         </p>
     </div>
     <div class="card bg-neutral shadow-xl max-w-4xl w-full">
@@ -84,14 +84,14 @@
             </form>
             <div class="divider">OR</div>
             <div class="flex gap-2 justify-center items-center flex-wrap">
-                <a class="btn btn-sm btn-primary" href="/forgot-password">
+                <a class="btn btn-sm btn-primary" routerLink="/forgot-password">
                     <i-lucide
                         [img]="ForgotPasswordIcon"
                         class="my-icon"
                     ></i-lucide>
                     Reset Password
                 </a>
-                <a class="btn btn-sm btn-primary" href="/register">
+                <a class="btn btn-sm btn-primary" routerLink="/register">
                     <i-lucide [img]="RegisterIcon" class="my-icon"></i-lucide>
                     Create Account
                 </a>

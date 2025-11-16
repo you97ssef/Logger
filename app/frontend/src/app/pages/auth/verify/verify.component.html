@@ -1,0 +1,35 @@
+<div class="flex flex-col items-center justify-center min-h-screen gap-5 p-2">
+    <div class="card bg-neutral shadow-xl max-w-4xl w-full">
+        <div class="card-body items-center">
+            <img
+                class="w-48 h-48 object-contain"
+                src="illustrations/verify.svg"
+                alt="Verification illustration"
+            />
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-base-content">
+                    {{
+                        verified ? "Account Verified!" : "Verifying Account..."
+                    }}
+                </h1>
+                <p class="text-base-content/70">
+                    @if (verified) { 
+                        Your account has been successfully verified. 
+                    } 
+                    @else { 
+                        Please wait while we verify your account. This may take a few moments. 
+                    }
+                </p>
+            </div>
+            @if (verified) {
+                <a class="btn btn-primary btn-wide" routerLink="/">
+                    <i-lucide [img]="Home" class="w-4 h-4"></i-lucide>
+                    Back to Home
+                </a>
+            } 
+            @else {
+                <div class="loading">Verifying...</div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,14 +1,15 @@
 import { LoginComponent } from './pages/auth/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { RegisterComponent } from './pages/auth/register/register.component';
+import { ForgotPasswordComponent } from './pages/auth/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './pages/auth/reset-password/reset-password.component';
+import { VerifyComponent } from './pages/auth/verify/verify.component';
 
 import { Routes } from '@angular/router';
 
 import { authGuard } from './guards/auth.guard';
 import { nonAuthGuard } from './guards/non-auth.guard';
-import { RegisterComponent } from './pages/auth/register/register.component';
-import { ForgotPasswordComponent } from './pages/auth/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './pages/auth/reset-password/reset-password.component';
 
 export const routes: Routes = [
     {
@@ -18,6 +19,7 @@ export const routes: Routes = [
         canActivate: [authGuard],
         children: [
             { path: '', component: HomeComponent },
+            { path: 'verify', component: VerifyComponent },
         ],
     },
     {
