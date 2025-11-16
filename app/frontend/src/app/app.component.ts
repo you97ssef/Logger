@@ -6,10 +6,12 @@ import { ToastComponent } from './core/components/toast/toast.component';
 import { ThemeService } from './core/services/theme.service';
 import { TokenService } from './core/services/token.service';
 import { AuthService } from './services/auth.service';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { ThemeChangerComponent } from './components/theme-changer/theme-changer.component';
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, ModalComponent, LoadingComponent, ToastComponent],
+    imports: [RouterOutlet, ModalComponent, LoadingComponent, ToastComponent, NavbarComponent, ThemeChangerComponent],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
 })
