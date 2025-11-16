@@ -1,0 +1,170 @@
+<div class="flex flex-col items-center justify-center min-h-screen gap-5 p-2">
+    <div class="text-center">
+        <p>Register using the form down below</p>
+        <p>
+            <span>If you already have an account, you can login </span>
+            <a class="link" href="/login">here</a>
+        </p>
+    </div>
+    <div class="card bg-neutral shadow-xl max-w-4xl w-full">
+        <div class="card-body">
+            <div class="flex flex-col items-center justify-center gap-3 my-5">
+                <img class="max-w-64 w-full" src="illustrations/register.svg" />
+                <h1 class="text-2xl">Register</h1>
+            </div>
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">Name</legend>
+                    <input
+                        type="text"
+                        class="input w-full"
+                        formControlName="name"
+                        placeholder="Your Name"
+                        [class.input-error]="
+                            registerForm.get('name')?.invalid &&
+                            registerForm.get('name')?.touched
+                        "
+                    />
+                    @if (registerForm.get('name')?.invalid && registerForm.get('name')?.touched) {
+                        <p class="label text-error">
+                            {{ getErrorMessage("name") }}
+                        </p>
+                    }
+                </fieldset>
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">Email</legend>
+                    <input
+                        type="email"
+                        class="input w-full"
+                        formControlName="email"
+                        placeholder="email@example.com"
+                        [class.input-error]="
+                            registerForm.get('email')?.invalid &&
+                            registerForm.get('email')?.touched
+                        "
+                    />
+                    @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+                        <p class="label text-error">
+                            {{ getErrorMessage("email") }}
+                        </p>
+                    }
+                </fieldset>
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">Password</legend>
+                    <label
+                        class="input w-full"
+                        [class.input-error]="
+                            registerForm.get('password')?.invalid &&
+                            registerForm.get('password')?.touched
+                        "
+                    >
+                        <input
+                            [type]="showPassword ? 'text' : 'password'"
+                            class="w-full"
+                            formControlName="password"
+                            placeholder="••••••••"
+                        />
+                        <button
+                            class="btn btn-xs btn-square btn-ghost"
+                            type="button"
+                            (click)="togglePassword()"
+                        >
+                            @if (!showPassword) {
+                                <i-lucide
+                                    [img]="EyeIcon"
+                                    class="my-icon"
+                                ></i-lucide>
+                            } 
+                            @else {
+                                <i-lucide
+                                    [img]="EyeOffIcon"
+                                    class="my-icon"
+                                ></i-lucide>
+                            }
+                        </button>
+                    </label>
+                    @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+                        <p class="label text-error">
+                            {{ getErrorMessage("password") }}
+                        </p>
+                    }
+                </fieldset>
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">Confirm Password</legend>
+                    <label
+                        class="input w-full"
+                        [class.input-error]="
+                            (registerForm.get('confirm_password')?.invalid &&
+                                registerForm.get('confirm_password')
+                                    ?.touched) ||
+                            (registerForm.hasError('passwordMismatch') &&
+                                registerForm.get('confirm_password')?.touched)
+                        "
+                    >
+                        <input
+                            [type]="showConfirmPassword ? 'text' : 'password'"
+                            class="w-full"
+                            formControlName="confirm_password"
+                            placeholder="••••••••"
+                        />
+                        <button
+                            class="btn btn-xs btn-square btn-ghost"
+                            type="button"
+                            (click)="togglePassword('confirm')"
+                        >
+                            @if (!showConfirmPassword) {
+                                <i-lucide
+                                    [img]="EyeIcon"
+                                    class="my-icon"
+                                ></i-lucide>
+                            } 
+                            @else {
+                                <i-lucide
+                                    [img]="EyeOffIcon"
+                                    class="my-icon"
+                                ></i-lucide>
+                            }
+                        </button>
+                    </label>
+                    @if (
+                        (registerForm.get('confirm_password')?.invalid &&
+                        registerForm.get('confirm_password')?.touched) ||
+                        (registerForm.hasError('passwordMismatch') &&
+                        registerForm.get('confirm_password')?.touched)
+                    ) {
+                        <p class="label text-error">
+                            {{ getErrorMessage("confirm_password") }}
+                        </p>
+                    }
+                </fieldset>
+                <div class="flex mt-5 justify-end gap-4 flex-wrap">
+                    <button
+                        type="submit"
+                        class="btn lg:btn-wide btn-primary"
+                        [disabled]="registerForm.invalid"
+                    >
+                        <i-lucide
+                            [img]="RegisterIcon"
+                            class="my-icon"
+                        ></i-lucide>
+                        Register
+                    </button>
+                </div>
+            </form>
+            <div class="divider">OR</div>
+            <div class="flex gap-2 justify-center items-center flex-wrap">
+                <a class="btn btn-sm btn-primary" href="/forgot-password">
+                    <i-lucide
+                        [img]="ForgotPasswordIcon"
+                        class="my-icon"
+                    ></i-lucide>
+                    Reset Password
+                </a>
+                <a class="btn btn-sm btn-primary" href="/login">
+                    <i-lucide [img]="LogInIcon" class="my-icon"></i-lucide>
+                    Login
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

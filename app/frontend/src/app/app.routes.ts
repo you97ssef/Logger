@@ -6,6 +6,7 @@ import { Routes } from '@angular/router';
 
 import { authGuard } from './guards/auth.guard';
 import { nonAuthGuard } from './guards/non-auth.guard';
+import { RegisterComponent } from './pages/auth/register/register.component';
 
 export const routes: Routes = [
     {
@@ -23,7 +24,8 @@ export const routes: Routes = [
         runGuardsAndResolvers: 'always',
         canActivate: [nonAuthGuard],
         children: [
-            { path: 'login', component: LoginComponent }
+            { path: 'login', component: LoginComponent },
+            { path: 'register', component: RegisterComponent }
         ],
     },
 
