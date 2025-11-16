@@ -1,0 +1,116 @@
+<div class="flex flex-col items-center justify-center h-screen gap-5 p-2">
+    <div class="text-center">
+        <p>Login using the form down below</p>
+        <p>
+            <span>If you don't have an account, you can create one </span>
+            <a class="link" href="/register">here</a>
+        </p>
+    </div>
+    <div class="card bg-neutral shadow-xl max-w-4xl w-full">
+        <div class="card-body">
+            <div class="flex flex-col items-center justify-center gap-3 my-5">
+                <img class="max-w-64 w-full" src="illustrations/login.svg" />
+                <h1 class="text-2xl">Login</h1>
+            </div>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">Email</legend>
+                    <input
+                        type="email"
+                        class="input w-full"
+                        formControlName="email"
+                        placeholder="email@example.com"
+                        [class.input-error]="
+                            loginForm.get('email')?.invalid &&
+                            loginForm.get('email')?.touched
+                        "
+                    />
+                    @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+                        <p class="label text-error">
+                            @if (loginForm.get('email')?.hasError('required')) {
+                                <span>Email is required</span>
+                            } 
+                            @if (loginForm.get('email')?.hasError('email')) {
+                                <span>Please enter a valid email address</span>
+                            }
+                        </p>
+                    }
+                </fieldset>
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">Password</legend>
+                    <label
+                        class="input w-full"
+                        [class.input-error]="
+                            loginForm.get('password')?.invalid &&
+                            loginForm.get('password')?.touched
+                        "
+                    >
+                        <input
+                            [type]="showPassword ? 'text' : 'password'"
+                            class="w-full"
+                            formControlName="password"
+                            placeholder="••••••••"
+                        />
+                        <button
+                            class="btn btn-xs btn-square btn-ghost"
+                            type="button"
+                            (click)="togglePassword()"
+                        >
+                            @if (!showPassword) {
+                                <i-lucide
+                                    [img]="EyeIcon"
+                                    class="my-icon"
+                                ></i-lucide>
+                            } 
+                            @else {
+                                <i-lucide
+                                    [img]="EyeOffIcon"
+                                    class="my-icon"
+                                ></i-lucide>
+                            }
+                        </button>
+                    </label>
+                    @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+                        <p class="label text-error">
+                            @if (loginForm.get('password')?.hasError('required')) {
+                                <span>Password is required</span>
+                            } 
+                            @if (loginForm.get('password')?.hasError('minlength'))
+                            {
+                                <span>Password must be at least 6 characters</span>
+                            } 
+                            @if (loginForm.get('password')?.hasError('maxlength'))
+                            {
+                                <span>Password must not exceed 255 characters</span>
+                            }
+                        </p>
+                    }
+                </fieldset>
+                <div class="flex mt-5 justify-end gap-4 flex-wrap">
+                    <button
+                        type="submit"
+                        class="btn lg:btn-wide btn-primary"
+                        [disabled]="loginForm.invalid"
+                    >
+                        <i-lucide [img]="LogInIcon" class="my-icon"></i-lucide>
+                        Login
+                    </button>
+                </div>
+            </form>
+            <div class="divider">OR</div>
+            <div class="flex gap-2 justify-center items-center flex-wrap">
+                <a class="btn btn-sm btn-primary" href="/forgot-password">
+                    <i-lucide
+                        [img]="ForgotPasswordIcon"
+                        class="my-icon"
+                    ></i-lucide>
+                    Reset Password
+                </a>
+                <a class="btn btn-sm btn-primary" href="/register">
+                    <i-lucide [img]="RegisterIcon" class="my-icon"></i-lucide>
+                    Create Account
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

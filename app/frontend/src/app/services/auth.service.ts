@@ -36,6 +36,10 @@ export class AuthService {
         return expiration - now < twentyFourHours;
     }
 
+    logout(): void {
+        this.tokenService.removeToken();
+    }
+
     // Auth API calls
     login(loginDTO: LoginDTO): Observable<OKResponse<string>> {
         return this.http
