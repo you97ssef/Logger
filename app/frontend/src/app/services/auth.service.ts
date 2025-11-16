@@ -3,7 +3,7 @@ import { LoginDTO, RegisterDTO, ResetPasswordDTO } from '../dtos/auth';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { OKResponse } from '../helpers/response';
-import { map, Observable, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { TokenService } from '../core/services/token.service';
 import { TokenUser } from '../helpers/token-user';
 

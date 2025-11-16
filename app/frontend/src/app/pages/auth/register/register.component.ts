@@ -15,12 +15,12 @@ import {
     Validators,
 } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { RegisterDTO } from '../../../dtos/auth';
 
 @Component({
     selector: 'app-register',
-    imports: [LucideAngularModule, ReactiveFormsModule],
+    imports: [LucideAngularModule, ReactiveFormsModule, RouterLink],
     templateUrl: './register.component.html',
     styleUrl: './register.component.css',
 })

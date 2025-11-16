@@ -7,10 +7,11 @@ import {
 } from 'lucide-angular';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-forgot-password',
-    imports: [LucideAngularModule, ReactiveFormsModule],
+    imports: [LucideAngularModule, ReactiveFormsModule, RouterLink],
     templateUrl: './forgot-password.component.html',
     styleUrl: './forgot-password.component.css',
 })

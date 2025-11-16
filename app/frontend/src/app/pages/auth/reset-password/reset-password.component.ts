@@ -15,12 +15,12 @@ import {
     Validators,
 } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ResetPasswordDTO } from '../../../dtos/auth';
 
 @Component({
     selector: 'app-reset-password',
-    imports: [LucideAngularModule, ReactiveFormsModule],
+    imports: [LucideAngularModule, ReactiveFormsModule, RouterLink],
     templateUrl: './reset-password.component.html',
     styleUrl: './reset-password.component.css',
 })

@@ -40,7 +40,9 @@ func PreparePurposeToken(jwtService *services.Jwt, email string, purpose string)
 }
 
 func GetUserId(jwtService *services.Jwt, c *gin.Context) uuid.UUID {
-	return jwtService.GetValue(c.MustGet("claims").(jwt.MapClaims), "id").(uuid.UUID)
+	stringId := jwtService.GetValue(c.MustGet("claims").(jwt.MapClaims), "id").(string)
+
+	return uuid.MustParse(stringId)
 }
 
 func IsAdmin(jwtService *services.Jwt, claims jwt.MapClaims) bool {
