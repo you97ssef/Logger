@@ -27,12 +27,7 @@
                     />
                     @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
                         <p class="label text-error">
-                            @if (loginForm.get('email')?.hasError('required')) {
-                                <span>Email is required</span>
-                            } 
-                            @if (loginForm.get('email')?.hasError('email')) {
-                                <span>Please enter a valid email address</span>
-                            }
+                            {{ getErrorMessage("email") }}
                         </p>
                     }
                 </fieldset>
@@ -72,17 +67,7 @@
                     </label>
                     @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
                         <p class="label text-error">
-                            @if (loginForm.get('password')?.hasError('required')) {
-                                <span>Password is required</span>
-                            } 
-                            @if (loginForm.get('password')?.hasError('minlength'))
-                            {
-                                <span>Password must be at least 6 characters</span>
-                            } 
-                            @if (loginForm.get('password')?.hasError('maxlength'))
-                            {
-                                <span>Password must not exceed 255 characters</span>
-                            }
+                            {{ getErrorMessage("password") }}
                         </p>
                     }
                 </fieldset>

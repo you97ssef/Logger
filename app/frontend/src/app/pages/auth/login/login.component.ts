@@ -31,10 +31,6 @@ export class LoginComponent {
 
     showPassword = false;
 
-    togglePassword(): void {
-        this.showPassword = !this.showPassword;
-    }
-
     // Reactive form
     loginForm = this.fb.group({
         email: [
@@ -45,11 +41,42 @@ export class LoginComponent {
             '',
             [
                 Validators.required,
-                Validators.minLength(6),
+                Validators.minLength(8),
                 Validators.maxLength(255),
             ],
         ],
     });
+
+    // Error messages
+    errorMessages: { [key: string]: { [key: string]: string } } = {
+        email: {
+            required: 'Email is required',
+            email: 'Please enter a valid email address',
+            maxlength: 'Email must not exceed 255 characters',
+        },
+        password: {
+            required: 'Password is required',
+            minlength: 'Password must be at least 8 characters',
+            maxlength: 'Password must not exceed 255 characters',
+        },
+    };
+
+    togglePassword(): void {
+        this.showPassword = !this.showPassword;
+    }
+
+    getErrorMessage(fieldName: string): string {
+        const control = this.loginForm.get(fieldName);
+        if (!control || !control.errors || !control.touched) {
+            return '';
+        }
+
+        const errors = Object.keys(control.errors)
+            .map((errorKey) => this.errorMessages[fieldName]?.[errorKey] || '')
+            .filter((msg) => msg !== '');
+
+        return errors.join(' - ');
+    }
 
     onSubmit(): void {
         if (this.loginForm.valid) {

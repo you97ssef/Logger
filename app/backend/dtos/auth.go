@@ -1,7 +1,7 @@
 package dtos
 
 type RegisterDTO struct {
-	Name            string `json:"username" binding:"required,max=255"`
+	Name            string `json:"name" binding:"required,max=255"`
 	Email           string `json:"email" binding:"required,email,max=255"`
 	Password        string `json:"password" binding:"required,max=255"`
 	ConfirmPassword string `json:"confirm_password" binding:"required,eqfield=Password"`
