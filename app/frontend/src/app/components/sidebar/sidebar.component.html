@@ -1,0 +1,101 @@
+<div>
+    <label
+        for="drawer"
+        class="btn btn-ghost btn-circle drawer-button self-end lg:hidden"
+    >
+        <i-lucide [img]="Back" class="my-icon"></i-lucide>
+    </label>
+    <div class="py-8">
+        <div class="text-center font-bold text-2xl">L O G G E R</div>
+    </div>
+    <div class="flex flex-col gap-4">
+        <ul class="menu rounded-box w-full">
+            <li>
+                <h2 class="menu-title text-accent-content">
+                    <i-lucide [img]="Account" class="my-icon"></i-lucide>
+                    <span> Account </span>
+                </h2>
+                <ul>
+                    <li>
+                        <a class="flex items-center">
+                            <i-lucide
+                                [img]="MyAccount"
+                                class="my-icon w-4"
+                            ></i-lucide>
+                            <span>My Account</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="flex items-center">
+                            <i-lucide
+                                [img]="EditProfile"
+                                class="my-icon w-4"
+                            ></i-lucide>
+                            <span>Edit Account</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="flex items-center text-warning">
+                            <i-lucide
+                                [img]="Email"
+                                class="my-icon w-4"
+                            ></i-lucide>
+                            <span>Send Verification</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="menu rounded-box w-full">
+            <li>
+                <h2 class="menu-title text-accent-content">
+                    <i-lucide [img]="Profiles" class="my-icon"></i-lucide>
+                    Profiles
+                </h2>
+                <ul class="overflow-hidden">
+                    <li>
+                        <a class="flex items-center text-success">
+                            <i-lucide
+                                [img]="New"
+                                class="my-icon w-4"
+                            ></i-lucide>
+                            <span>New Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            Send Verification
+                        </a>
+                    </li>
+                    <li>
+                        <a class="flex items-center">
+                            <i-lucide
+                                [img]="SeeMore"
+                                class="my-icon w-4"
+                            ></i-lucide>
+                            <span>More profiles</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="flex items-center">
+                            <i-lucide
+                                [img]="Integration"
+                                class="my-icon w-4"
+                            ></i-lucide>
+                            <span>Integration</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<div>
+    <button class="btn btn-error text-base w-full my-2" (click)="logout()">
+        <i-lucide [img]="Logout" class="my-icon"></i-lucide>
+        <span>Logout</span>
+    </button>
+    <div class="flex justify-center text-xs">
+        <span>Logger © {{ year }}</span>
+    </div>
+</div>
