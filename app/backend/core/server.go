@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -45,9 +45,11 @@ const (
 )
 
 func (s *Server) setupDatabase() {
+	checkFile(s, s.Config.DatabaseConnection)
+
 	var err error
 
-	s.DB, err = gorm.Open(postgres.Open(s.Config.DatabaseConnection), &gorm.Config{})
+	s.DB, err = gorm.Open(sqlite.Open(s.Config.DatabaseConnection), &gorm.Config{})
 
 	if err != nil {
 		s.Logger.Alert(err.Error())
