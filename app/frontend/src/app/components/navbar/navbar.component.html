@@ -1,0 +1,32 @@
+<div class="navbar bg-neutral shadow-sm">
+    <div class="navbar-start">
+        <label
+            for="drawer"
+            class="btn btn-ghost btn-circle drawer-button lg:hidden"
+        >
+            <i-lucide [img]="Menu" class="my-icon"></i-lucide>
+        </label>
+    </div>
+    <div class="navbar-center">
+        <a routerLink="/" class="btn btn-ghost text-xl">L O G G E R</a>
+    </div>
+    <div class="navbar-end">
+        <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-sm btn-ghost text-primary-content bg-primary/60 text-xl btn-circle">
+                {{ Initials }}
+            </div>
+            <ul
+                tabindex="-1"
+                class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-4 gap-1 shadow-sm"
+            >
+                <li><a>My Account</a></li>
+                <li>
+                    <button class="bg-error/20 text-error-content flex justify-between w-full" (click)="logout()">
+                        <span>Logout</span>
+                        <i-lucide [img]="Logout" class="my-icon w-4"></i-lucide>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

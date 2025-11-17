@@ -122,7 +122,10 @@ func (s *Server) setupHasher(environment any) {
 }
 
 func (s *Server) setupJwt(environment any) {
-	s.Jwt = services.NewJwt(environment.(map[string]any)["jwt"].(map[string]any)["secret_key"].(string))
+	s.Jwt = services.NewJwt(
+		environment.(map[string]any)["jwt"].(map[string]any)["secret_key"].(string),
+		int(environment.(map[string]any)["jwt"].(map[string]any)["days"].(float64)),
+	)
 }
 
 func (s *Server) setupRouter() {

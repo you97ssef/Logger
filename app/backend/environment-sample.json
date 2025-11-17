@@ -4,7 +4,7 @@
         "log_file": "./logs/app.log",
         "database_connection": "./data/logger.db",
         "mode": "development",
-        "frontend_url": "http://localhost:3000"
+        "frontend_url": "http://localhost:4200"
     },
     "mailer": {
         "username": "username",
@@ -16,6 +16,7 @@
         "cost": 12
     },
     "jwt": {
-        "secret_key": "secret"
+        "secret_key": "secret",
+        "days": 7
     }
 }

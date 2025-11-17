@@ -14,5 +14,9 @@ func Seed(s *core.Server) {
 		return
 	}
 
+	usersIds := seedUsers(s)
+	profileIds := seedProfiles(s, usersIds)
+	seedEntries(s, profileIds)
+
 	createMigration(s.DB, "seed")
 }
