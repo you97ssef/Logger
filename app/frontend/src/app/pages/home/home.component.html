@@ -1,8 +1,52 @@
-<app-unverified-user></app-unverified-user>
+<div class="flex flex-wrap gap-4 justify-between items-center mb-10">
+    <div>
+        <h1 class="text-3xl font-bold">Hello {{ firstWord(authService.me()!.name) }}</h1>
+        <p class="text-xs text-primary-content flex items-center gap-1">
+            <i-lucide [img]="Calendar" class="my-icon w-4 h-4"></i-lucide>
+            <span>{{ authService.me()!.created_at | date }}</span>
+            <span>|</span>
+            @if (authService.me()!.verified_at === null) {
+                <i-lucide [img]="NotVerified" class="w-4 h-4 text-error-content"></i-lucide>
+                <span class="text-error-content">Unverified</span>
+            } @else {
+                <i-lucide [img]="Verified" class="my-icon w-4 h-4"></i-lucide>
+                <span class="text-success">Verified</span>
+            }
+            <span>|</span>
+            <i-lucide [img]="ProfilesIcon" class="my-icon w-4 h-4"></i-lucide>
+            <span>{{ profiles ? `${profiles.length} Profiles` : "Fetching profiles..." }}</span>
+        </p>
+    </div>
+    <button class="ml-auto btn btn-primary">
+        <i-lucide [img]="New" class="my-icon"></i-lucide>
+        New profile
+    </button>
+</div>
 
-<button
-    class="btn btn-error"
-    (click)="logout()"
->
-    Logout
-</button>
+@if (authService.me()!.verified_at === null) {
+    <app-unverified-user class="flex justify-center mb-10"></app-unverified-user>
+}
+
+<p class="text-sm">
+    <span>{{ profiles ? "Profiles" : "Fetching profiles..." }}</span>
+</p>
+@if (profiles === null) {
+    <div class="flex justify-center items-center h-32">
+        <span class="loading loading-spinner loading-lg"></span>
+    </div>
+} @else {
+    @if (profiles.length === 0) {
+        <div class="alert alert-info mt-4">
+            <div>
+                <i-lucide [img]="ProfilesIcon" class="my-icon"></i-lucide>
+                <span>No profiles found. Create your first profile to get started!</span>
+            </div>
+        </div>
+    } @else {
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            @for (item of profiles; track $index) {
+                
+            }
+        </div>
+    }
+}
