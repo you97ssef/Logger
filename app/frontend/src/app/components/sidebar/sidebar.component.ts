@@ -14,11 +14,11 @@ import {
     UnplugIcon,
 } from 'lucide-angular';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-sidebar',
-    imports: [LucideAngularModule],
+    imports: [LucideAngularModule, RouterLink],
     templateUrl: './sidebar.component.html',
     styleUrl: './sidebar.component.css',
 })

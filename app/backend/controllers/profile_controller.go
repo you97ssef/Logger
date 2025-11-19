@@ -31,6 +31,15 @@ func (ctl *Controller) CreateProfile(c *gin.Context) {
 		return
 	}
 
+	if newProfileDTO.Trackers != nil {
+		for _, t := range *newProfileDTO.Trackers {
+			if t.Platform != models.InApp && t.Platform != models.Email && t.Platform != models.Both {
+				BadRequest(c, "Invalid tracker platform")
+				return
+			}
+		}
+	}
+
 	userId := helpers.GetUserId(ctl.server.Jwt, c)
 
 	exists, err := ctl.repositories.UserRepo.ExistById(userId)
@@ -49,6 +58,10 @@ func (ctl *Controller) CreateProfile(c *gin.Context) {
 	profile := &models.Profile{
 		UserId: userId,
 		Name:   newProfileDTO.Name,
+	}
+
+	if newProfileDTO.Trackers != nil {
+		profile.Trackers = helpers.TrackersToString(&dtos.UpdateProfileDTO{Trackers: newProfileDTO.Trackers})
 	}
 
 	if err := ctl.repositories.ProfileRepo.Save(profile); err != nil {

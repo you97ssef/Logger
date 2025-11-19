@@ -1,0 +1,232 @@
+<div class="flex flex-col items-center justify-center h-full gap-5 p-2">
+    <div class="text-center">
+        <p>Edit your profile using the form down below</p>
+        <p>
+            <span>You can manage your profiles from the </span>
+            <a class="link" routerLink="/">home page</a>
+        </p>
+    </div>
+
+    @if (loading) {
+    <div class="flex justify-center items-center">
+        <span class="loading loading-spinner loading-lg"></span>
+    </div>
+    } @else {
+    <div class="card bg-neutral shadow-xl max-w-4xl w-full">
+        <div class="card-body">
+            <div class="flex flex-col items-center justify-center gap-3 my-5">
+                <img class="max-w-64 w-full" src="illustrations/logs.svg" />
+                <h1 class="text-2xl">Edit Profile</h1>
+            </div>
+            <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+                <!-- Profile Name -->
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">Profile Name</legend>
+                    <input
+                        type="text"
+                        class="input w-full"
+                        formControlName="name"
+                        placeholder="My Profile"
+                        [class.input-error]="
+                            profileForm.get('name')?.invalid &&
+                            profileForm.get('name')?.touched
+                        "
+                    />
+                    @if (profileForm.get('name')?.invalid &&
+                    profileForm.get('name')?.touched) {
+                    <p class="label text-error">
+                        {{ getErrorMessage("name") }}
+                    </p>
+                    }
+                </fieldset>
+
+                <!-- Trackers Section -->
+                <div class="mt-5">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-semibold">
+                            Trackers (Optional)
+                        </h3>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-primary"
+                            (click)="addTracker()"
+                        >
+                            <i-lucide
+                                [img]="CreateIcon"
+                                class="my-icon"
+                            ></i-lucide>
+                            Add Tracker
+                        </button>
+                    </div>
+
+                    <div formArrayName="trackers" class="flex flex-col gap-4">
+                        @for (tracker of trackers.controls; track $index) {
+                        <div
+                            [formGroupName]="$index"
+                            class="card card-sm bg-base-100 shadow-md"
+                        >
+                            <div class="card-body p-4">
+                                <div
+                                    class="flex justify-between items-center mb-2"
+                                >
+                                    <h4 class="font-semibold">
+                                        Tracker {{ $index + 1 }}
+                                    </h4>
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-square btn-error"
+                                        (click)="removeTracker($index)"
+                                    >
+                                        <i-lucide
+                                            [img]="TrashIcon"
+                                            class="my-icon"
+                                        ></i-lucide>
+                                    </button>
+                                </div>
+
+                                <fieldset class="fieldset">
+                                    <legend class="fieldset-legend">
+                                        Tracker Name
+                                    </legend>
+                                    <input
+                                        type="text"
+                                        class="input w-full"
+                                        formControlName="name"
+                                        placeholder="Error Tracker"
+                                        [class.input-error]="
+                                            tracker.get('name')?.invalid &&
+                                            tracker.get('name')?.touched
+                                        "
+                                    />
+                                    @if (tracker.get('name')?.invalid &&
+                                    tracker.get('name')?.touched) {
+                                    <p class="label text-error">
+                                        {{
+                                            getTrackerErrorMessage(
+                                                $index,
+                                                "name"
+                                            )
+                                        }}
+                                    </p>
+                                    }
+                                </fieldset>
+
+                                <fieldset class="fieldset">
+                                    <legend class="fieldset-legend">
+                                        Pattern
+                                    </legend>
+                                    <input
+                                        type="text"
+                                        class="input w-full"
+                                        formControlName="pattern"
+                                        placeholder="error|fail"
+                                        [class.input-error]="
+                                            tracker.get('pattern')?.invalid &&
+                                            tracker.get('pattern')?.touched
+                                        "
+                                    />
+                                    @if (tracker.get('pattern')?.invalid &&
+                                    tracker.get('pattern')?.touched) {
+                                    <p class="label text-error">
+                                        {{
+                                            getTrackerErrorMessage(
+                                                $index,
+                                                "pattern"
+                                            )
+                                        }}
+                                    </p>
+                                    }
+                                </fieldset>
+
+                                <fieldset class="fieldset">
+                                    <legend class="fieldset-legend">
+                                        Platform
+                                    </legend>
+                                    <div class="flex gap-2">
+                                        <button
+                                            type="button"
+                                            class="btn btn-sm flex-1"
+                                            [class.btn-primary]="
+                                                tracker.get('inApp')?.value
+                                            "
+                                            [class.btn-ghost]="
+                                                !tracker.get('inApp')?.value
+                                            "
+                                            (click)="
+                                                togglePlatform($index, 'inApp')
+                                            "
+                                        >
+                                            <i-lucide
+                                                [img]="SmartphoneIcon"
+                                                class="my-icon"
+                                            ></i-lucide>
+                                            In-App
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="btn btn-sm flex-1"
+                                            [class.btn-primary]="
+                                                tracker.get('email')?.value
+                                            "
+                                            [class.btn-ghost]="
+                                                !tracker.get('email')?.value
+                                            "
+                                            (click)="
+                                                togglePlatform($index, 'email')
+                                            "
+                                        >
+                                            <i-lucide
+                                                [img]="MailIcon"
+                                                class="my-icon"
+                                            ></i-lucide>
+                                            Email
+                                        </button>
+                                    </div>
+                                    @if (tracker.invalid && tracker.touched &&
+                                    tracker.errors?.['platformRequired']) {
+                                    <p class="label text-error">
+                                        {{
+                                            getTrackerErrorMessage(
+                                                $index,
+                                                "platform"
+                                            )
+                                        }}
+                                    </p>
+                                    }
+                                </fieldset>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="flex mt-5 justify-end gap-4 flex-wrap">
+                    <button
+                        type="submit"
+                        class="btn lg:btn-wide btn-primary"
+                        [disabled]="profileForm.invalid"
+                    >
+                        <i-lucide [img]="SaveIcon" class="my-icon"></i-lucide>
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+            <div class="divider">OR</div>
+            <div class="flex gap-2 justify-center items-center flex-wrap">
+                <a class="btn btn-sm btn-ghost" routerLink="/">
+                    <i-lucide [img]="HomeIcon" class="my-icon"></i-lucide>
+                    Back to Home
+                </a>
+                <button
+                    type="button"
+                    class="btn btn-sm btn-error"
+                    (click)="deleteProfile()"
+                >
+                    <i-lucide [img]="TrashIcon" class="my-icon"></i-lucide>
+                    Delete Profile
+                </button>
+            </div>
+        </div>
+    </div>
+    }
+</div>

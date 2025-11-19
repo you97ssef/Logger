@@ -17,7 +17,7 @@
                 </h2>
                 <ul>
                     <li>
-                        <a class="flex items-center">
+                        <a routerLink="/me" class="flex items-center">
                             <i-lucide
                                 [img]="MyAccount"
                                 class="my-icon w-4"
@@ -26,7 +26,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="flex items-center">
+                        <a routerLink="/edit-account" class="flex items-center">
                             <i-lucide
                                 [img]="EditProfile"
                                 class="my-icon w-4"
@@ -54,7 +54,10 @@
                 </h2>
                 <ul class="overflow-hidden">
                     <li>
-                        <a class="flex items-center text-success-content">
+                        <a
+                            routerLink="/new-profile"
+                            class="flex items-center text-success-content"
+                        >
                             <i-lucide
                                 [img]="New"
                                 class="my-icon w-4"
@@ -63,21 +66,19 @@
                         </a>
                     </li>
                     <li>
-                        <a>
-                            Profile 1
-                        </a>
-                    </li>
-                    <li>
-                        <a class="flex items-center">
+                        <a routerLink="/" class="flex items-center">
                             <i-lucide
                                 [img]="SeeMore"
                                 class="my-icon w-4"
                             ></i-lucide>
-                            <span>More profiles</span>
+                            <span>All profiles</span>
                         </a>
                     </li>
                     <li>
-                        <a class="flex items-center text-info-content">
+                        <a
+                            routerLink="/integration"
+                            class="flex items-center text-info-content"
+                        >
                             <i-lucide
                                 [img]="Integration"
                                 class="my-icon w-4"

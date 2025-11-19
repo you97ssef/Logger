@@ -40,7 +40,7 @@ func (r *Routes) RegisterRoutes(c *controllers.Controller, m *middleware.Middlew
 
 	connected.GET("/profiles", c.GetProfiles)
 	connected.POST("/profiles", c.CreateProfile)
-	connected.PUT("/profiles", c.UpdateProfile)
+	connected.PUT("/profiles/:id", c.UpdateProfile)
 	connected.DELETE("/profiles/:id", c.DeleteProfile)
 	
 	admin.GET("/users/:id/profiles", c.GetUserProfiles)
