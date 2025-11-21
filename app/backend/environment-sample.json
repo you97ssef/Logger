@@ -2,7 +2,7 @@
     "config": {
         "port": "8000",
         "log_file": "./logs/app.log",
-        "database_connection": "host=localhost user=postgres password=postgres dbname=logger port=5432",
+        "database_connection": "./data/logger.db",
         "mode": "development",
         "frontend_url": "http://localhost:4200"
     },

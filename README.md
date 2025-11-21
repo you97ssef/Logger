@@ -86,7 +86,7 @@ It includes a **web site**, a **web app**, and a **cross-platform mobile app**.
 - Accept **structured JSON logs** for flexible parsing.
 
 #### c. Log Storage & Retrieval
-- Use **PostgreSQL** as the main database (with indexing for fast search).  
+- Use **SQLite** by default (file-based, zero-config).  
 - Allow log filtering by **date, severity, keywords**, or **application**.  
 - **WebSocket support** for real-time log tailing.
 
