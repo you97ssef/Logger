@@ -2,25 +2,25 @@
     @for (toast of toastService.toasts(); track $index) {
         @if (toast.type === 'success') {
             <div class="alert alert-success">
-                <i-lucide [img]="Check" class="my-icon text-2xl"></i-lucide>
+                <i-lucide [img]="Check" class="my-icon"></i-lucide>
                 <span>{{ toast.message }}</span>
             </div>
         }
         @if (toast.type === 'error') {
             <div class="alert alert-error">
-                <i-lucide [img]="Error" class="my-icon text-2xl"></i-lucide>
+                <i-lucide [img]="Error" class="my-icon"></i-lucide>
                 <span>{{ toast.message }}</span>
             </div>
         }
         @if (toast.type === 'info') {
             <div class="alert alert-info">
-                <i-lucide [img]="Info" class="my-icon text-2xl"></i-lucide>
+                <i-lucide [img]="Info" class="my-icon"></i-lucide>
                 <span>{{ toast.message }}</span>
             </div>
         }
         @if (toast.type === 'warning') {
             <div class="alert alert-warning">
-                <i-lucide [img]="Warning" class="my-icon text-2xl"></i-lucide>
+                <i-lucide [img]="Warning" class="my-icon"></i-lucide>
                 <span>{{ toast.message }}</span>
             </div>
         }

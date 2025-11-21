@@ -1,0 +1,219 @@
+@if (loading) {
+<div class="flex justify-center items-center h-screen">
+    <span class="loading loading-spinner loading-lg"></span>
+</div>
+} @else {
+<!-- Header -->
+<div class="flex flex-wrap gap-4 justify-between items-center mb-6">
+    <div>
+        <h1 class="text-3xl font-bold flex items-center gap-2">
+            <i-lucide [img]="CodeIcon" class="my-icon"></i-lucide>
+            Integration Guide
+        </h1>
+        <p class="text-sm text-base-content/60 mt-1">
+            Integrate Logger into your applications with ease
+        </p>
+    </div>
+    <div class="flex gap-2 flex-wrap">
+        <a routerLink="/" class="btn btn-sm btn-ghost" title="Back to home">
+            <i-lucide [img]="HomeIcon" class="my-icon"></i-lucide>
+            Home
+        </a>
+    </div>
+</div>
+
+<!-- Profile Selector -->
+<div class="card bg-neutral shadow-xl mb-6">
+    <div class="card-body p-6">
+        <h2 class="card-title mb-4">
+            <i-lucide [img]="ZapIcon" class="my-icon"></i-lucide>
+            Select a Profile
+        </h2>
+        @if (profiles.length === 0) {
+        <div class="alert alert-warning">
+            <i-lucide [img]="BookOpenIcon" class="my-icon"></i-lucide>
+            <span
+                >You don't have any profiles yet. Create one to get
+                started!</span
+            >
+            <a routerLink="/new-profile" class="btn btn-sm btn-primary">
+                Create Profile
+            </a>
+        </div>
+        } @else {
+        <div
+            class="flex flex-col md:flex-row gap-4 items-start md:items-center"
+        >
+            <div class="flex-1 w-full">
+                <select
+                    class="select select-bordered w-full"
+                    [(ngModel)]="selectedProfile"
+                    (ngModelChange)="onProfileChange($event.ID)"
+                >
+                    @for (profile of profiles; track profile.ID) {
+                    <option [ngValue]="profile">{{ profile.Name }}</option>
+                    }
+                </select>
+            </div>
+            @if (selectedProfile) {
+            <div class="flex-1 w-full">
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">Profile Token</legend>
+                    <input
+                        type="password"
+                        class="input input-bordered w-full font-mono text-xs"
+                        [value]="selectedProfile.Token"
+                        readonly
+                    />
+                </fieldset>
+            </div>
+            }
+        </div>
+        }
+    </div>
+</div>
+
+@if (selectedProfile) {
+<!-- API Information -->
+<div class="card bg-neutral shadow-xl mb-6">
+    <div class="card-body p-6">
+        <h2 class="card-title mb-4">
+            <i-lucide [img]="BookOpenIcon" class="my-icon"></i-lucide>
+            API Endpoint
+        </h2>
+        <div class="space-y-4">
+            <div>
+                <p class="text-sm text-base-content/60 mb-2">
+                    POST Request to:
+                </p>
+                <code
+                    class="block bg-base-100 p-4 rounded-lg font-mono text-sm break-all"
+                >
+                    {{ apiUrl }}/log
+                </code>
+            </div>
+            <div>
+                <p class="text-sm text-base-content/60 mb-2">Request Body:</p>
+                <pre class="bg-base-100 p-4 rounded-lg overflow-x-auto"><code>{{
+  "text": "Your log message here",
+  "token": "{{ selectedProfile.Token }}"
+}</code></pre>
+            </div>
+            <div class="alert alert-info">
+                <i-lucide [img]="BookOpenIcon" class="w-4 h-4"></i-lucide>
+                <div>
+                    <h3 class="font-bold">Important Notes:</h3>
+                    <ul class="text-sm list-disc list-inside mt-1">
+                        <li>
+                            The token is 64 characters long and unique to your
+                            profile
+                        </li>
+                        <li>
+                            Keep your token secure - don't expose it in public
+                            repositories
+                        </li>
+                        <li>The text field supports any string content</li>
+                        <li>
+                            Logs are stored and can be viewed in the Logs page
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Code Examples -->
+<div class="space-y-4">
+    <h2 class="text-2xl font-bold flex items-center gap-2">
+        <i-lucide [img]="CodeIcon" class="my-icon"></i-lucide>
+        Code Examples
+    </h2>
+    <p class="text-sm text-base-content/60 mb-4">
+        Choose your language and copy the example code below. The token is
+        already included from your selected profile.
+    </p>
+
+    @for (example of getCodeExamples(); track $index) {
+    <div class="card bg-neutral shadow-xl">
+        <div class="card-body p-0">
+            <div
+                class="flex justify-between items-center p-4 border-b border-base-300"
+            >
+                <h3 class="font-bold flex items-center gap-2">
+                    <span class="text-2xl">{{ example.icon }}</span>
+                    {{ example.label }}
+                </h3>
+                <button
+                    class="btn btn-sm btn-ghost"
+                    (click)="copyToClipboard(example.code, $index)"
+                    title="Copy to clipboard"
+                >
+                    @if (copiedIndex === $index) {
+                    <i-lucide
+                        [img]="CheckIcon"
+                        class="w-4 h-4 text-success"
+                    ></i-lucide>
+                    <span class="text-success">Copied!</span>
+                    } @else {
+                    <i-lucide [img]="CopyIcon" class="w-4 h-4"></i-lucide>
+                    <span>Copy</span>
+                    }
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <pre class="p-4 text-sm"><code>{{ example.code }}</code></pre>
+            </div>
+        </div>
+    </div>
+    }
+</div>
+
+<!-- Quick Tips -->
+<div class="card bg-neutral shadow-xl mt-6">
+    <div class="card-body">
+        <h2 class="card-title mb-4">
+            <i-lucide [img]="BookOpenIcon" class="my-icon"></i-lucide>
+            Quick Tips
+        </h2>
+        <ul class="space-y-2 text-sm">
+            <li class="flex items-start gap-2">
+                <span class="text-primary mt-1">✓</span>
+                <span
+                    ><strong>Environment Variables:</strong> Store your token in
+                    environment variables for better security</span
+                >
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-primary mt-1">✓</span>
+                <span
+                    ><strong>Error Handling:</strong> Implement proper error
+                    handling to avoid losing logs</span
+                >
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-primary mt-1">✓</span>
+                <span
+                    ><strong>Log Levels:</strong> Include log levels in your
+                    messages (INFO, ERROR, WARNING, DEBUG) for better
+                    filtering</span
+                >
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-primary mt-1">✓</span>
+                <span
+                    ><strong>Trackers:</strong> Configure trackers in your
+                    profile to get notifications for specific patterns</span
+                >
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-primary mt-1">✓</span>
+                <span
+                    ><strong>Rate Limiting:</strong> Be mindful of your logging
+                    frequency to avoid overwhelming the system</span
+                >
+            </li>
+        </ul>
+    </div>
+</div>
+} }

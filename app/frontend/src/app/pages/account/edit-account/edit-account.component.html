@@ -1,0 +1,165 @@
+@if (loading) {
+<div class="flex justify-center items-center h-screen">
+    <span class="loading loading-spinner loading-lg"></span>
+</div>
+} @else if (user) {
+<!-- Header -->
+<div class="flex flex-wrap gap-4 justify-between items-center mb-6">
+    <div>
+        <h1 class="text-3xl font-bold flex items-center gap-2">
+            <i-lucide [img]="UserIcon" class="my-icon"></i-lucide>
+            Edit Account
+        </h1>
+        <p class="text-sm text-base-content/60 mt-1">
+            Update your account information
+        </p>
+    </div>
+    <div class="flex gap-2 flex-wrap">
+        <a
+            routerLink="/me"
+            class="btn btn-sm btn-ghost"
+            title="Back to profile"
+        >
+            <i-lucide [img]="HomeIcon" class="my-icon"></i-lucide>
+            Back to Profile
+        </a>
+    </div>
+</div>
+
+<!-- Edit Form -->
+<div class="max-w-2xl mx-auto">
+    <div class="card bg-neutral shadow-xl">
+        <div class="card-body">
+            <div class="flex flex-col items-center justify-center gap-3 my-5">
+                <img class="max-w-64 w-full" src="illustrations/login.svg" />
+                <h2 class="text-2xl">Update Your Account</h2>
+            </div>
+
+            <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
+                <!-- Name -->
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">Name</legend>
+                    <input
+                        type="text"
+                        class="input w-full"
+                        formControlName="name"
+                        placeholder="Your name"
+                        [class.input-error]="
+                            accountForm.get('name')?.invalid &&
+                            accountForm.get('name')?.touched
+                        "
+                    />
+                    @if (accountForm.get('name')?.invalid &&
+                    accountForm.get('name')?.touched) {
+                    <p class="label text-error">
+                        {{ getErrorMessage("name") }}
+                    </p>
+                    }
+                </fieldset>
+
+                <!-- Email (Read-only) -->
+                <fieldset class="fieldset mt-4">
+                    <legend class="fieldset-legend">
+                        Email (Cannot be changed)
+                    </legend>
+                    <input
+                        type="email"
+                        class="input w-full"
+                        [value]="user.Email"
+                        readonly
+                        disabled
+                    />
+                    <p class="label text-xs text-base-content/60">
+                        Email cannot be changed for security reasons
+                    </p>
+                </fieldset>
+
+                <div class="flex mt-6 justify-end gap-4 flex-wrap">
+                    <button
+                        type="submit"
+                        class="btn lg:btn-wide btn-primary"
+                        [disabled]="accountForm.invalid"
+                    >
+                        <i-lucide [img]="SaveIcon" class="my-icon"></i-lucide>
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+
+            <div class="divider">DANGER ZONE</div>
+
+            <div class="flex gap-2 justify-center items-center flex-wrap">
+                <button
+                    type="button"
+                    class="btn btn-error"
+                    (click)="openDeleteModal()"
+                >
+                    <i-lucide [img]="TrashIcon" class="my-icon"></i-lucide>
+                    Delete Account Permanently
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+@if (showDeleteModal) {
+<div class="modal modal-open">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg text-error mb-4">
+            ⚠️ Delete Account Permanently
+        </h3>
+        <p class="mb-4">
+            This action <strong>cannot be undone</strong>. This will permanently
+            delete your account and all associated data including:
+        </p>
+        <ul class="list-disc list-inside mb-4 text-sm space-y-1">
+            <li>All your profiles</li>
+            <li>All log entries</li>
+            <li>All trackers and configurations</li>
+            <li>Your account information</li>
+        </ul>
+        <p class="mb-4 font-semibold">
+            Please enter your password to confirm deletion:
+        </p>
+
+        <form [formGroup]="deleteForm" (ngSubmit)="deleteAccount()">
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Password</legend>
+                <input
+                    type="password"
+                    class="input w-full"
+                    formControlName="password"
+                    placeholder="Enter your password"
+                    [class.input-error]="
+                        deleteForm.get('password')?.invalid &&
+                        deleteForm.get('password')?.touched
+                    "
+                />
+                @if (deleteForm.get('password')?.invalid &&
+                deleteForm.get('password')?.touched) {
+                <p class="label text-error">Password is required</p>
+                }
+            </fieldset>
+
+            <div class="modal-action">
+                <button
+                    type="button"
+                    class="btn btn-ghost"
+                    (click)="closeDeleteModal()"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    class="btn btn-error"
+                    [disabled]="deleteForm.invalid"
+                >
+                    <i-lucide [img]="TrashIcon" class="my-icon"></i-lucide>
+                    Delete My Account
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+} }

@@ -1,7 +1,8 @@
 package dtos
 
 type NewProfileDTO struct {
-	Name string `json:"name" binding:"required,max=255"`
+	Name     string     `json:"name" binding:"required,max=255"`
+	Trackers *[]Tracker `json:"trackers" binding:"omitempty,dive"`
 }
 
 type UpdateProfileDTO struct {

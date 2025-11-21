@@ -1,5 +1,6 @@
 export interface NewProfileDTO {
     name: string;
+    trackers?: Tracker[] | null;
 }
 
 export interface UpdateProfileDTO {

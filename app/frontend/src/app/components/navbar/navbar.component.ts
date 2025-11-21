@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { LogOutIcon, LucideAngularModule, MenuIcon } from 'lucide-angular';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -14,6 +14,7 @@ export class NavbarComponent {
     readonly Logout = LogOutIcon;
 
     authService = inject(AuthService);
+    router = inject(Router);
 
     get Initials(): string {
         return this.authService
@@ -26,5 +27,6 @@ export class NavbarComponent {
 
     logout(): void {
         this.authService.logout();
+        this.router.navigateByUrl('/login');
     }
 }

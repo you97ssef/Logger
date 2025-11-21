@@ -6,8 +6,6 @@ import { Observable } from 'rxjs';
 import { NewProfileDTO, UpdateProfileDTO } from '../dtos/profile';
 import { Profile } from '../models/profile';
 
-
-
 @Injectable({
     providedIn: 'root',
 })
@@ -30,10 +28,11 @@ export class ProfileService {
     }
 
     updateProfile(
+        id: string,
         updateProfileDTO: UpdateProfileDTO
     ): Observable<OKResponse<Profile>> {
         return this.http.put<OKResponse<Profile>>(
-            `${environment.api}/profiles`,
+            `${environment.api}/profiles/${id}`,
             updateProfileDTO
         );
     }

@@ -1,0 +1,185 @@
+@if (loading) {
+<div class="flex justify-center items-center h-screen">
+    <span class="loading loading-spinner loading-lg"></span>
+</div>
+} @else if (user) {
+<!-- Header -->
+<div class="flex flex-wrap gap-4 justify-between items-center mb-6">
+    <div>
+        <h1 class="text-3xl font-bold flex items-center gap-2">
+            <i-lucide [img]="UserIcon" class="my-icon"></i-lucide>
+            My Account
+        </h1>
+        <p class="text-sm text-base-content/60 mt-1">
+            View and manage your account information
+        </p>
+    </div>
+    <div class="flex gap-2 flex-wrap">
+        <a
+            routerLink="/edit-account"
+            class="btn btn-sm btn-primary"
+            title="Edit account"
+        >
+            <i-lucide [img]="EditIcon" class="my-icon"></i-lucide>
+            Edit Account
+        </a>
+        <a routerLink="/" class="btn btn-sm btn-ghost" title="Back to home">
+            <i-lucide [img]="HomeIcon" class="my-icon"></i-lucide>
+            Home
+        </a>
+    </div>
+</div>
+
+<!-- Profile Card -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Main Info Card -->
+    <div class="lg:col-span-2">
+        <div class="card bg-neutral shadow-xl">
+            <div class="card-body">
+                <h2 class="card-title mb-4">
+                    <i-lucide [img]="UserIcon" class="my-icon"></i-lucide>
+                    Profile Information
+                </h2>
+
+                <div class="space-y-4">
+                    <!-- Name -->
+                    <div
+                        class="flex items-start gap-4 p-4 bg-base-100 rounded-lg"
+                    >
+                        <div class="shrink-0 mt-1">
+                            <i-lucide
+                                [img]="UserIcon"
+                                class="w-5 h-5 text-primary"
+                            ></i-lucide>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-xs text-base-content/60 mb-1">
+                                Name
+                            </p>
+                            <p class="font-semibold text-lg">{{ user.Name }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div
+                        class="flex items-start gap-4 p-4 bg-base-100 rounded-lg"
+                    >
+                        <div class="shrink-0 mt-1">
+                            <i-lucide
+                                [img]="MailIcon"
+                                class="w-5 h-5 text-primary"
+                            ></i-lucide>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-xs text-base-content/60 mb-1">
+                                Email
+                            </p>
+                            <p class="font-semibold">{{ user.Email }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Role -->
+                    <div
+                        class="flex items-start gap-4 p-4 bg-base-100 rounded-lg"
+                    >
+                        <div class="shrink-0 mt-1">
+                            <i-lucide
+                                [img]="ShieldIcon"
+                                class="w-5 h-5 text-primary"
+                            ></i-lucide>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-xs text-base-content/60 mb-1">
+                                Role
+                            </p>
+                            <div class="badge badge-primary badge-lg">
+                                {{ getRoleName(user.Role) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Verification Status -->
+                    <div
+                        class="flex items-start gap-4 p-4 bg-base-100 rounded-lg"
+                    >
+                        <div class="shrink-0 mt-1">
+                            @if (user.VerifiedAt) {
+                            <i-lucide
+                                [img]="CheckCircleIcon"
+                                class="w-5 h-5 text-success"
+                            ></i-lucide>
+                            } @else {
+                            <i-lucide
+                                [img]="XCircleIcon"
+                                class="w-5 h-5 text-error"
+                            ></i-lucide>
+                            }
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-xs text-base-content/60 mb-1">
+                                Email Verification
+                            </p>
+                            @if (user.VerifiedAt) {
+                            <p class="text-success font-semibold">
+                                Verified on
+                                {{ user.VerifiedAt | date : "medium" }}
+                            </p>
+                            } @else {
+                            <p class="text-error font-semibold">Not Verified</p>
+                            <p class="text-sm text-base-content/60 mt-1">
+                                Please check your email to verify your account
+                            </p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Card -->
+    <div class="lg:col-span-1 space-y-4">
+        <!-- Account Created -->
+        <div class="card bg-neutral shadow-xl">
+            <div class="card-body">
+                <h3 class="card-title text-base mb-2">
+                    <i-lucide [img]="CalendarIcon" class="w-4 h-4"></i-lucide>
+                    Account Created
+                </h3>
+                <p class="text-sm text-base-content/60">
+                    {{ user.CreatedAt | date : "fullDate" }}
+                </p>
+                <p class="text-xs text-base-content/50 mt-1">
+                    {{ user.CreatedAt | date : "shortTime" }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Last Updated -->
+        <div class="card bg-neutral shadow-xl">
+            <div class="card-body">
+                <h3 class="card-title text-base mb-2">
+                    <i-lucide [img]="CalendarIcon" class="w-4 h-4"></i-lucide>
+                    Last Updated
+                </h3>
+                <p class="text-sm text-base-content/60">
+                    {{ user.UpdatedAt | date : "fullDate" }}
+                </p>
+                <p class="text-xs text-base-content/50 mt-1">
+                    {{ user.UpdatedAt | date : "shortTime" }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Account ID -->
+        <div class="card bg-neutral shadow-xl">
+            <div class="card-body">
+                <h3 class="card-title text-base mb-2">Account ID</h3>
+                <p class="text-xs font-mono text-base-content/60 break-all">
+                    {{ user.ID }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+}
